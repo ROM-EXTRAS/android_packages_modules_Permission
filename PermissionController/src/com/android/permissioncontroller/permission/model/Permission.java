@@ -18,7 +18,6 @@ package com.android.permissioncontroller.permission.model;
 
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
-import android.Manifest;
 
 import androidx.annotation.NonNull;
 
@@ -138,7 +137,7 @@ public final class Permission {
      * @return {@code true} if the permission (and the app-op) is granted.
      */
     public boolean isGrantedIncludingAppOp() {
-        return mGranted && (!affectsAppOp() || isAppOpAllowed()) && (!isReviewRequired() || Manifest.permission.INTERNET.equals(mName));
+        return mGranted && (!affectsAppOp() || isAppOpAllowed()) && !isReviewRequired();
     }
 
     public boolean isReviewRequired() {
