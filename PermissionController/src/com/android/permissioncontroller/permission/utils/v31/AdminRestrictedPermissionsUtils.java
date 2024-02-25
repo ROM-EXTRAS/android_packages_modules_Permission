@@ -23,6 +23,7 @@ import android.content.Context;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.ArraySet;
+import android.util.Log;
 
 import com.android.modules.utils.build.SdkLevel;
 
@@ -54,6 +55,8 @@ public final class AdminRestrictedPermissionsUtils {
             ADMIN_RESTRICTED_SENSORS_PERMISSIONS.add(Manifest.permission.BODY_SENSORS_BACKGROUND);
         }
     }
+
+    private static final String LOG_TAG = "AdminRestrictedPermissionsUtils";
 
     /**
      * Returns true if the admin may grant this permission, false otherwise.
@@ -95,6 +98,13 @@ public final class AdminRestrictedPermissionsUtils {
     }
 
     private static boolean mayManagedProfileAdminGrantReadSms(DevicePolicyManager dpm) {
+
+        boolean sdkLevel = SdkLevel.isAtLeastU();
+        boolean orgowned = dpm.isOrganizationOwnedDeviceWithManagedProfile();
+        boolean all_subs = dpm.getManagedSubscriptionsPolicy().getPolicyType()
+                == ManagedSubscriptionsPolicy.TYPE_ALL_MANAGED_SUBSCRIPTIONS;
+
+        Log.e(LOG_TAG, "sdkLevel " + sdkLevel+ " orgowned " + orgowned + " all_subs " + all_subs );
         return SdkLevel.isAtLeastU() && dpm.isOrganizationOwnedDeviceWithManagedProfile()
                 && dpm.getManagedSubscriptionsPolicy().getPolicyType()
                 == ManagedSubscriptionsPolicy.TYPE_ALL_MANAGED_SUBSCRIPTIONS;
